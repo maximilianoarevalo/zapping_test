@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/maximilianoarevalo/zapping_test/backend/models"
@@ -20,12 +21,28 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	// Crear usuario DB
 	err := repository.CreateUser(user)
 	if err != nil {
-		http.Error(w, "Error al crear usuario ", http.StatusInternalServerError)
-		return
+		if err.Error() == fmt.Sprintf("el usuario con el correo %s ya está registrado", user.Email) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]interface{}{
+				"message":  "Correo ya registrado!",
+				"status":   400,
+				"userMail": user.Email,
+			})
+			return
+		} else {
+			http.Error(w, "Error al crear usuario", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Cuenta creada!"})
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"message":  "Cuenta creada!",
+		"status":   200,
+		"userName": user.Name,
+		"userMail": user.Email,
+	}) //redirigir al login
 }
 
 // Login user controller
@@ -44,7 +61,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// Obtener cuenta usuario por email
 	user, err := repository.GetUserByEmail(loginData.Email)
 	if err != nil {
-		http.Error(w, "Usuario no encontrado ", http.StatusUnauthorized)
+		http.Error(w, "Usuario no encontrado ", http.StatusNotFound)
 		return
 	}
 
@@ -55,5 +72,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Login verificado!", "userName": user.Email, "userMail": user.Email}) //TODO: retornar token al front
+	json.NewEncoder(w).Encode(map[string]interface{}{"message": "Login verificado!", "status": 200, "userName": user.Name, "userMail": user.Email}) //TODO: retornar token al front
 }

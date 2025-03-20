@@ -10,24 +10,54 @@
         <label for="password" class="form-label">Contraseña</label>
         <input type="password" v-model="password" class="form-control" id="password" required />
       </div>
+      <div v-if="notRegistered" class="not-registered-user">Usuario no registrado</div>
       <div class="button"><button type="submit" class="btn btn-dark">Iniciar Sesión</button></div>
-      <div class="register-text"><label class="label">Si no tienes cuenta registrate <router-link to="/crear-cuenta" class="nav-link">acá</router-link></label></div>
+      <div class="register-text"><label class="label">Si no tienes cuenta registrate <router-link to="/crear-cuenta"
+            class="nav-link">acá</router-link></label></div>
     </form>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'LoginPage',
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      notRegistered: false
     };
   },
   methods: {
-    handleLogin() {
-      console.log('Iniciando sesión:', this.email, this.password);
+    async handleLogin() {
+      try {
+        const response = await axios.post("http://localhost:3000/login", {
+          email: this.email,
+          password: this.password
+        });
+        console.log("Respuesta del backend:", response.data);
+        // Redireccion a player
+        if (response.data.status == 200) {
+          alert("Inicio de sesión correcto!");
+          this.$router.push('/player');
+        }
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response)
+          console.error("Error en la respuesta del servidor:", error.response.data);
+          if (error.response.status == 404) {
+            this.notRegistered = true;
+          }else{
+            this.notRegistered = false;
+          }
+        } else if (error.request) {
+          console.error("No se recibió respuesta del servidor");
+        } else {
+          console.error("Error al enviar datos:", error.message);
+        }
+      }
     }
   }
 };
@@ -36,42 +66,46 @@ export default {
 <style scoped>
 .login-form {
   display: flex;
-  justify-content: center;  
-  align-items: center;      
-  height: 50vh;  
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
 }
 
 .login-form-content {
-  background-color: #a0a0a0;  
-  padding: 30px;              
-  border-radius: 8px;        
-  box-shadow: 0 4px 6px rgba(0.2, 0.2, 0.2, 0.2);  
+  background-color: #a0a0a0;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0.2, 0.2, 0.2, 0.2);
   width: 100%;
-  max-width: 450px;         
+  max-width: 450px;
 }
 
-.button{
+.button {
   display: flex;
   justify-content: center;
 }
 
-.btn{
+.btn {
   margin-top: 30px;
   color: white;
 }
 
-.label{
+.label {
   display: inline;
 }
 
-.nav-link{
+.nav-link {
   display: inline;
   text-decoration: underline;
 }
 
-.register-text{
+.register-text {
   text-align: center;
   margin-top: 20px;
 }
 
+.not-registered-user {
+  text-align: center;
+  margin-top: 20px;
+}
 </style>

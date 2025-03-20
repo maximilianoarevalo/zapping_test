@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/maximilianoarevalo/zapping_test/backend/db"
@@ -9,6 +10,19 @@ import (
 )
 
 func CreateUser(user models.User) error {
+	// Verificar si el usuario ya existe
+	var existingUserCount int
+	err := db.DB.QueryRow("SELECT COUNT(*) FROM users WHERE email = $1", user.Email).Scan(&existingUserCount)
+	if err != nil {
+		log.Println("Error al verificar usuario:", err)
+		return err
+	}
+
+	// Si el usuario ya existe, devolver un error
+	if existingUserCount > 0 {
+		return fmt.Errorf("el usuario con el correo %s ya está registrado", user.Email)
+	}
+
 	encryptedPassword, err := HashPassword(user.Password)
 	if err != nil {
 		log.Fatal("Error al encriptar contraseña")
