@@ -4,14 +4,18 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/maximilianoarevalo/zapping_test/backend/db"
+	"github.com/maximilianoarevalo/zapping_test/backend/routes"
 )
 
 func main() {
+	// DB Connection
+	db.Connect()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Go dockerizado!")
-	})
+	// Routes
+	rt := routes.SetupRoutes()
 
 	fmt.Println("Running on :3000")
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(http.ListenAndServe(":3000", rt))
 }
