@@ -11,10 +11,9 @@
         <input type="password" v-model="password" class="form-control" id="password" required />
       </div>
       <div class="button"><button type="submit" class="btn btn-dark">Iniciar Sesión</button></div>
-      
+      <div class="register-text"><label class="label">Si no tienes cuenta registrate <router-link to="/crear-cuenta" class="nav-link">acá</router-link></label></div>
     </form>
   </div>
-  
 </template>
 
 <script>
@@ -28,7 +27,7 @@ export default {
   },
   methods: {
     handleLogin() {
-      //console.log('Iniciando sesión:', this.email, this.password);
+      console.log('Iniciando sesión:', this.email, this.password);
     }
   }
 };
@@ -39,7 +38,7 @@ export default {
   display: flex;
   justify-content: center;  
   align-items: center;      
-  height: 60vh;             
+  height: 50vh;  
 }
 
 .login-form-content {
@@ -48,7 +47,7 @@ export default {
   border-radius: 8px;        
   box-shadow: 0 4px 6px rgba(0.2, 0.2, 0.2, 0.2);  
   width: 100%;
-  max-width: 400px;         
+  max-width: 450px;         
 }
 
 .button{
@@ -61,5 +60,18 @@ export default {
   color: white;
 }
 
+.label{
+  display: inline;
+}
+
+.nav-link{
+  display: inline;
+  text-decoration: underline;
+}
+
+.register-text{
+  text-align: center;
+  margin-top: 20px;
+}
 
 </style>

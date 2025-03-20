@@ -11,9 +11,9 @@
           <li class="nav-item active">
             <router-link to="/" class="nav-link">Login</router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link to="/crear-cuenta" class="nav-link">Crear Cuenta</router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link to="/player" class="nav-link">Player</router-link>
           </li>
@@ -21,7 +21,9 @@
       </div>
     </div>
   </nav>
-  <router-view></router-view>
+  <div class="content">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
@@ -40,6 +42,14 @@ export default {
 }
 .active{
   text-decoration: underline;
+}
+.navbar {
+  height: 60px;
+}
+
+.content {
+  margin-top: 70px;
+  padding: 20px;
 }
 
 </style>
