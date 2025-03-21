@@ -9,13 +9,16 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <router-link to="/" class="nav-link">Login</router-link>
+            <router-link to="/" class="nav-link" v-if="!isAuthenticated">Login</router-link>
           </li>
-          <!-- <li class="nav-item">
-            <router-link to="/crear-cuenta" class="nav-link">Crear Cuenta</router-link>
-          </li> -->
           <li class="nav-item">
-            <router-link to="/player" class="nav-link">Player</router-link>
+            <router-link to="/crear-cuenta" class="nav-link" v-if="!isAuthenticated">Crear Cuenta</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/player" class="nav-link" v-if="isAuthenticated">Player</router-link>
+          </li>
+          <li class="nav-item" v-if="isAuthenticated">
+            <button class="btn btn-danger" @click="logout">Cerrar sesión</button>
           </li>
         </ul>
       </div>
@@ -30,19 +33,32 @@
 
 export default {
   name: 'App',
-  components: {
+  computed: {
+    isAuthenticated() {
+      return !!localStorage.getItem("token");
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem("token");
+      this.isAuthenticated = false;
+      this.$router.push("/");
+      window.location.reload();
+    }
   }
 }
 </script>
 
 <style>
-.navbar-brand{
+.navbar-brand {
   font-size: 25px;
   font-weight: bold;
 }
-.active{
+
+.active {
   text-decoration: underline;
 }
+
 .navbar {
   height: 60px;
 }
@@ -51,5 +67,4 @@ export default {
   margin-top: 70px;
   padding: 20px;
 }
-
 </style>

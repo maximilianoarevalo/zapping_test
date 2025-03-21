@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/maximilianoarevalo/zapping_test/backend/auth"
 	"github.com/maximilianoarevalo/zapping_test/backend/models"
 	"github.com/maximilianoarevalo/zapping_test/backend/repository"
 )
@@ -67,10 +70,38 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// Comparar password vs encriptada
 	if !repository.VerifyPassword(loginData.Password, user.Password) {
-		http.Error(w, "Contraseña incorrecta ", http.StatusUnauthorized)
+		//http.Error(w, "Contraseña incorrecta ", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"message":  "Contraseña incorrecta!",
+			"status":   400,
+			"userMail": user.Email,
+		})
+		return
+	}
+
+	// Generar el token JWT
+	claims := &jwt.RegisteredClaims{
+		Issuer:    "zapping_test",
+		Subject:   user.Email,
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(4 * time.Hour)),
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// Firmar el token
+	signedToken, err := token.SignedString(auth.JwtKey)
+	if err != nil {
+		http.Error(w, "Error al generar el token", http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]interface{}{"message": "Login verificado!", "status": 200, "userName": user.Name, "userMail": user.Email}) //TODO: retornar token al front
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"message":  "Login verificado!",
+		"status":   200,
+		"userName": user.Name,
+		"userMail": user.Email,
+		"token":    signedToken, // retornar token al front
+	})
 }

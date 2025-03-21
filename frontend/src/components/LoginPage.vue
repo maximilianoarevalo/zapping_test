@@ -38,9 +38,12 @@ export default {
           password: this.password
         });
         console.log("Respuesta del backend:", response.data);
+        console.log(response.data.status)
         // Redireccion a player
         if (response.data.status == 200) {
           alert("Inicio de sesión correcto!");
+          // Guardar el token en localStorage
+          localStorage.setItem("token", response.data.token);
           this.$router.push('/player');
         }
       } catch (error) {
@@ -49,7 +52,11 @@ export default {
           console.error("Error en la respuesta del servidor:", error.response.data);
           if (error.response.status == 404) {
             this.notRegistered = true;
-          }else{
+          } else if (error.response.status == 400) {
+            alert("Contraseña incorrecta!");
+            this.notRegistered = false;
+          }
+          else {
             this.notRegistered = false;
           }
         } else if (error.request) {
