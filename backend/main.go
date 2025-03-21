@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/maximilianoarevalo/zapping_test/backend/db"
-	"github.com/maximilianoarevalo/zapping_test/backend/routes"
+	"github.com/maximilianoarevalo/zapping_test/backend/src/db"
+	"github.com/maximilianoarevalo/zapping_test/backend/src/routes"
 )
 
 func main() {
