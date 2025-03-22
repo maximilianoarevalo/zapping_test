@@ -35,6 +35,8 @@ func SetupRoutes() *mux.Router {
 	router.HandleFunc("/login", controllers.Login).Methods("POST", "OPTIONS")
 
 	router.HandleFunc("/livestream", controllers.Player).Methods("GET") // probado en postman
+	// ruta para obtener archivos desde hls
+	router.PathPrefix("/segments/").Handler(http.StripPrefix("/segments", http.FileServer(http.Dir("assets/hls_test/"))))
 
 	return router
 }

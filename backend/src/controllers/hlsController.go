@@ -54,19 +54,20 @@ func liveStream() {
 }
 
 func handleM3U8File(w http.ResponseWriter, r *http.Request, targetDuration int, mediaSequence int, segments []int) []byte {
+	w.Header().Set("Content-Type", "application/vnd.apple.mpegurl")
 
 	// Generacion de archivo incremental livestream
 	playlistContent := fmt.Sprintf(
 		`#EXTM3U
 #EXT-X-VERSION:3
-#EXT-X-TARGETDURATION:%d
+#EXT-X-TARGETDURATION:10
 #EXT-X-MEDIA-SEQUENCE:%d
 #EXTINF:%d.000000,
-segment_%d.ts
+http://localhost:3000/segments/segment%d.ts
 #EXTINF:%d.000000,
-segment_%d.ts
+http://localhost:3000/segments/segment%d.ts
 #EXTINF:%d.000000,
-segment_%d.ts`, targetDuration, mediaSequence, targetDuration, segments[0], targetDuration, segments[1], targetDuration, segments[2])
+http://localhost:3000/segments/segment%d.ts`, mediaSequence, targetDuration, segments[0], targetDuration, segments[1], targetDuration, segments[2])
 
 	// Logica retorno archivo incremental
 	_, err := w.Write([]byte(playlistContent))
