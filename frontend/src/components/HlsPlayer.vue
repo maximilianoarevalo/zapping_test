@@ -16,9 +16,10 @@ export default {
   methods: {
     loadVideo() {
       const videoElement = this.$refs.videoPlayer;
+      const m3u8Url = 'http://localhost:3000/livestream'
 
       // Request para obtener m3u8 actualizado
-      fetch('http://localhost:3000/livestream')
+      fetch(m3u8Url)
         .then(response => response.text())
         .then(m3u8Content => {
           console.log('Contenido del archivo M3U8:', m3u8Content);  // Se muestra archivo con segmentos por consola (para validar)
