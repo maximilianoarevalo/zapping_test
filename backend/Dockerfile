@@ -11,7 +11,7 @@ COPY . .
 RUN go mod tidy
 
 # Exponemos el puerto
-EXPOSE ${GO_PORT}
+EXPOSE 3000
 
 # Ejecutamos la aplicación
 CMD ["go", "run", "main.go"]
