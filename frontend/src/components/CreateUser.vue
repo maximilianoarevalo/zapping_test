@@ -106,7 +106,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50vh;
+  height: 93vh; 
+  width: 100%; 
+  background-color: #353638; 
 }
 
 .login-form-content {
@@ -139,7 +141,7 @@ export default {
 }
 
 .error-message {
-  color: red;
+  color: #f0f0f0;
   font-size: 0.9em;
   margin-top: 5px;
 }

@@ -1,5 +1,6 @@
 <template>
   <div class="video-container">
+    <p class="streaming-text">Señal en vivo!</p>
     <video ref="videoPlayer" class="video-player" controls autoplay muted></video>
   </div>
 </template>
@@ -49,12 +50,21 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f8f9fa;
+  flex-direction: column;
+  height: 93vh; 
+  width: 100%; 
+  background-color: #353638; 
+}
+
+.streaming-text{
+  font-size: 25px;
+  font-weight: 600;
+  color: #f0f0f0;
 }
 
 .video-player {
   width: 100%;
-  max-width: 800px;
+  max-width: 60%;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

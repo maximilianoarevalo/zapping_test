@@ -1,14 +1,15 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Plataforma de streaming</a>
+      <a class="navbar-brand">Plataforma de streaming</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
             <router-link to="/" class="nav-link" v-if="!isAuthenticated">Login</router-link>
           </li>
           <li class="nav-item">
@@ -18,13 +19,12 @@
             <router-link to="/player" class="nav-link" v-if="isAuthenticated">Player</router-link>
           </li>
         </ul>
-        <!-- Boton logout -->
-        <div v-if="isAuthenticated">
-          <button class="btn btn-light" @click="logout">Cerrar sesión</button>
-        </div>
+        <ul class="navbar-nav">
+          <li class="nav-item" v-if="isAuthenticated" id="logoutButton">
+            <button class="btn btn-light ms-lg-2" @click="logout">Cerrar sesión</button>
+          </li>
+        </ul>
       </div>
-
-
     </div>
   </nav>
   <div class="content">
@@ -53,6 +53,12 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap');
+
+* {
+  font-family: 'Winky Sans', sans-serif;
+}
+
 .navbar-brand {
   font-size: 25px;
   font-weight: bold;
@@ -63,20 +69,19 @@ export default {
 }
 
 .navbar {
-  height: 60px;
-}
-
-.content {
-  margin-top: 70px;
-  padding: 20px;
+  height: 7vh;
 }
 
 .navbar-nav {
   display: flex;
-  width: 90%;
+  width: 100%;
 }
 
-.logout-item {
-  margin-left: auto;
+#logoutButton{
+  margin-left: 80%;
+}
+
+.ms-lg-2 {
+  margin-left: 10px;
 }
 </style>
