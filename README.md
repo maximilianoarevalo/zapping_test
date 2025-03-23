@@ -56,4 +56,4 @@ http://localhost:3001
 
 - Frontend: http://localhost:3001
 - Backend: http://localhost:3000
-- Base de datos: http://localhost:5423
+- Base de datos: http://localhost:5432
