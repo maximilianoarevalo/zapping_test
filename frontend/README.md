@@ -10,6 +10,7 @@
 ## Observación
 
 - Para manejar los valores de puertos, credenciales de base de datos, etc. sería ideal utilizar un archivo .env de secrets/configmap. Sin embargo, como este proyecto es solo a nivel local y esta dockerizado, no se implementa esta lógica por simplicidad de accesos a la hora probar, ya que se decide evitar el manejo de un archivo .env externo que se deba incluir de manera manual al proyecto.
+- Las contraseñas se manejan con encriptado básico, ya que aunque se trate de una prueba local, se debe proteger la data sensible de los usuarios.
 
 ## Rutas backend
 
