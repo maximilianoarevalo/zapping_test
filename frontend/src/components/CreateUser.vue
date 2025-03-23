@@ -8,7 +8,8 @@
       </div>
       <div class="form-group">
         <label for="email" class="form-label">Email</label>
-        <input type="email" v-model="email" class="form-control" id="email" required />
+        <input type="email" v-model="email" class="form-control" @input="validateEmail" id="email" required />
+        <div v-if="emailError" class="error-message">{{ emailError }}</div>
       </div>
       <div class="form-group">
         <label for="password" class="form-label">Contraseña</label>
@@ -23,7 +24,7 @@
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
       <div v-if="registered" class="registered-user">Ya existe una cuenta para ese correo</div>
-      <div class="button"><button type="submit" class="btn btn-dark" :class="{ disabled: !buttonEnabled }"
+      <div class="button"><button type="submit" class="btn btn-dark" :disabled="!buttonEnabled || errorMessage || emailError"
           >Crear Cuenta</button></div>
 
     </form>
@@ -43,11 +44,19 @@ export default {
       password2: '',
       errorMessage: '',
       buttonEnabled: false,
-      registered: false
+      registered: false,
+      emailError: null
     };
   },
   methods: {
-    //TODO: validar doble password
+    validateEmail() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!this.email.match(emailRegex)) {
+        this.emailError = "El email no es válido";
+      } else {
+        this.emailError = null;
+      }
+    },
     validatePasswords() {
       if (this.password1 !== this.password2) {
         this.errorMessage = 'Las contraseñas no coinciden';
@@ -127,5 +136,11 @@ export default {
 .registered-user {
   text-align: center;
   margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
 }
 </style>

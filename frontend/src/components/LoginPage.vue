@@ -4,14 +4,15 @@
       <h2>Iniciar Sesión</h2>
       <div class="form-group">
         <label for="email" class="form-label">Email</label>
-        <input type="email" v-model="email" class="form-control" id="email" required />
+        <input type="email" v-model="email" class="form-control" id="email" @input="validateEmail" required />
+        <div v-if="emailError" class="error-message">{{ emailError }}</div>
       </div>
       <div class="form-group">
         <label for="password" class="form-label">Contraseña</label>
         <input type="password" v-model="password" class="form-control" id="password" required />
       </div>
       <div v-if="notRegistered" class="not-registered-user">Usuario no registrado</div>
-      <div class="button"><button type="submit" class="btn btn-dark">Iniciar Sesión</button></div>
+      <div class="button"><button type="submit" class="btn btn-dark" :disabled="emailError">Iniciar Sesión</button></div>
       <div class="register-text"><label class="label">Si no tienes cuenta registrate <router-link to="/crear-cuenta"
             class="nav-link">acá</router-link></label></div>
     </form>
@@ -27,10 +28,19 @@ export default {
     return {
       email: '',
       password: '',
-      notRegistered: false
+      notRegistered: false,
+      emailError: null
     };
   },
   methods: {
+    validateEmail() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!this.email.match(emailRegex)) {
+        this.emailError = "El email no es válido";
+      } else {
+        this.emailError = null;
+      }
+    },
     async handleLogin() {
       try {
         const response = await axios.post("http://localhost:3000/login", {
@@ -44,7 +54,9 @@ export default {
           alert("Inicio de sesión correcto!");
           // Guardar el token en localStorage
           localStorage.setItem("token", response.data.token);
-          this.$router.push('/player');
+          this.$router.push('/player').then(() => {
+            window.location.reload(); // Solucion bug que no se actualiza el navbar a cerrar-sesion
+          });
         }
       } catch (error) {
         if (error.response) {
@@ -114,5 +126,11 @@ export default {
 .not-registered-user {
   text-align: center;
   margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
 }
 </style>

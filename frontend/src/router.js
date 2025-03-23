@@ -20,12 +20,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token");
 
-  // Si no hay token de autenticidad redireccionar al login
-  if (to.meta.requiresAuth && !token) {
-    next("/login");
-  }
-  else {
-    next();
+  // Proteger ruta login y crear-cuenta -> logeados no pueden acceder
+  if (token && (to.path === '/' || to.path === '/crear-cuenta')) {
+    next('/player'); // Se redirige al player
+  // Si no esta logeado -> rederigir a login, permitir /crear-cuenta
+  } else if (to.meta.requiresAuth && !token) {
+    next('/');
+  } else {
+    next(); // Caso extra
   }
 });
 

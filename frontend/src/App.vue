@@ -6,7 +6,7 @@
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item active">
             <router-link to="/" class="nav-link" v-if="!isAuthenticated">Login</router-link>
@@ -17,11 +17,14 @@
           <li class="nav-item">
             <router-link to="/player" class="nav-link" v-if="isAuthenticated">Player</router-link>
           </li>
-          <li class="nav-item" v-if="isAuthenticated">
-            <button class="btn btn-danger" @click="logout">Cerrar sesión</button>
-          </li>
         </ul>
+        <!-- Boton logout -->
+        <div v-if="isAuthenticated">
+          <button class="btn btn-light" @click="logout">Cerrar sesión</button>
+        </div>
       </div>
+
+
     </div>
   </nav>
   <div class="content">
@@ -66,5 +69,14 @@ export default {
 .content {
   margin-top: 70px;
   padding: 20px;
+}
+
+.navbar-nav {
+  display: flex;
+  width: 90%;
+}
+
+.logout-item {
+  margin-left: auto;
 }
 </style>
